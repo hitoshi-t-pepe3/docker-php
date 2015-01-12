@@ -78,8 +78,8 @@ RUN chgrp -R phpenv /usr/local/phpenv
 RUN chmod -R g+rwxXs /usr/local/phpenv
 
 # Install multiple versions of php
-RUN sed -i -e 's/--enable-fpm //g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
-RUN sed -i -e 's/$/ --with-apxs2=\/usr\/local\/sbin\/apxs/' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
+RUN perl -i -pe 's/--enable-fpm\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
+RUN sed -i -e '$s/$/\n--with-apxs2=\/usr\/sbin\/apxs' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
 
 ADD versions.txt /usr/local/phpenv/versions.txt
 RUN xargs -L 1 -i ksh -c 'phpenv install php-{}; mv /usr/lib64/httpd/modules/libphp5.so /usr/local/phpenv/versions/{}/' < /usr/local/phpenv/versions.txt
@@ -89,3 +89,16 @@ RUN \
   phpenv global 5.6.4 && \
   phpenv rehash
 
+# install phpenv-apache-version
+RUN \
+  cd /usr/local/phpenv/plugins && \
+  git clone https://github.com/garamon/phpenv-apache-version && \
+  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
+  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
+
+# php-build-plugin-phpunit
+RUN \
+  cd /user/local/phpenv/plugins/php-build/share/php-build/after-install.d \
+  curl -o phpunit https://raw.github.com/CHH/php-build-plugin-phpunit/master/share/php-build/after-install.d/phpunit && \
+  chgrp -R phpenv phpunit && \
+  chmod -R g+rwxXs phpunit
