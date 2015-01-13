@@ -82,7 +82,8 @@ RUN perl -i -pe 's/--enable-fpm\n//g' /usr/local/phpenv/plugins/php-build/share/
 RUN sed -i -e '$s/$/\n--with-apxs2=\/usr\/sbin\/apxs/' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
 
 ADD versions.txt /usr/local/phpenv/versions.txt
-RUN xargs -L 1 -i ksh -c 'phpenv install php-{}; mv /usr/lib/httpd/modules/libphp5.so /usr/local/phpenv/versions/{}/' < /usr/local/phpenv/versions.txt
+# RUN xargs -L 1 -i ksh -c 'phpenv install php-{}; mv /usr/lib/httpd/modules/libphp5.so /usr/local/phpenv/versions/{}/' < /usr/local/phpenv/versions.txt
+RUN xargs -L 1 -i ksh -c 'phpenv install php-{}' < /usr/local/phpenv/versions.txt
 
 # settgin global use PHP
 RUN \
