@@ -100,6 +100,6 @@ RUN \
 # php-build-plugin-phpunit
 RUN \
   cd /usr/local/phpenv/plugins/php-build/share/php-build/after-install.d && \
-  curl -o phpunit https://raw.github.com/CHH/php-build-plugin-phpunit/master/share/php-build/after-install.d/phpunit && \
-  chgrp -R phpenv  /usr/local/phpenv/plugins/php-build/share/php-build/after-install.d/phpunit && \
-  chmod -R g+rwxXs  /usr/local/phpenv/plugins/php-build/share/php-build/after-install.d/phpunit
+  curl -o phpunit https://raw.githubusercontent.com/CHH/php-build-plugin-phpunit/master/share/php-build/after-install.d/phpunit && \
+  chgrp -R phpenv phpunit && \
+  chmod -R g+rwxXs phpunit
