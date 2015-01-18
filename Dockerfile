@@ -77,7 +77,15 @@ RUN eval "(phpenv init -)"
 RUN chgrp -R phpenv /usr/local/phpenv
 RUN chmod -R g+rwxXs /usr/local/phpenv
 
+# php-build-plugin-phpunit
+RUN \
+  cd /usr/local/phpenv/plugins/php-build/share/php-build/after-install.d && \
+  curl -o phpunit https://raw.githubusercontent.com/CHH/php-build-plugin-phpunit/master/share/php-build/after-install.d/phpunit && \
+  chgrp -R phpenv phpunit && \
+  chmod -R g+rwxXs phpunit
+
 # Install multiple versions of php
+ENV PHP_BUILD_CONFIGURE_OPTS --with-apxs2
 RUN perl -i -pe 's/--enable-fpm\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
 RUN sed -i -e '$s/$/\n--with-apxs2=\/usr\/sbin\/apxs/' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
 
@@ -97,9 +105,3 @@ RUN \
   chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
   chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
 
-# php-build-plugin-phpunit
-RUN \
-  cd /usr/local/phpenv/plugins/php-build/share/php-build/after-install.d && \
-  curl -o phpunit https://raw.githubusercontent.com/CHH/php-build-plugin-phpunit/master/share/php-build/after-install.d/phpunit && \
-  chgrp -R phpenv phpunit && \
-  chmod -R g+rwxXs phpunit
