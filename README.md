@@ -2,7 +2,7 @@
 A sinmple Docker image for running PHP width Centos 6
 
 ## What's include
-* phpenv  5.4.36, 5.5.19, 5.6.4
+* phpenv  5.3.28, 5.4.36, 5.5.19, 5.6.4
 * phpenv-apache-version
 
 CentOS 6.5
