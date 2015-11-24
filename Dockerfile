@@ -42,6 +42,8 @@ RUN yum install -y \
   t1lib \
   t1lib-devel \
   which \
+  tar \
+  bzip2 \
   wget
 
 ## add phpenv group
