@@ -68,6 +68,20 @@ RUN \
   chgrp -R phpenv /usr/local/phpenv/plugins/php-build && \
   chmod -R g+rwxXs /usr/local/phpenv/plugins/php-build
 
+# install phpenv-apache-version
+RUN \
+  cd /usr/local/phpenv/plugins && \
+  git clone https://github.com/garamon/phpenv-apache-version && \
+  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
+  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
+
+# install phpenv-composer
+RUN \
+  cd /usr/local/phpenv/plugins && \
+  git clone https://github.com/ngyuki/phpenv-composer.git && \
+  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-composer && \
+  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-composer
+
 ## 
 # Complete ENV
 ENV PHPENV_ROOT /usr/local/phpenv
@@ -79,12 +93,12 @@ RUN eval "(phpenv init -)"
 RUN chgrp -R phpenv /usr/local/phpenv
 RUN chmod -R g+rwxXs /usr/local/phpenv
 
-# php-build-plugin-phpunit
-RUN \
-  cd /usr/local/phpenv/plugins/php-build/share/php-build/after-install.d && \
-  curl -o phpunit https://raw.githubusercontent.com/CHH/php-build-plugin-phpunit/master/share/php-build/after-install.d/phpunit && \
-  chgrp -R phpenv phpunit && \
-  chmod -R g+rwxXs phpunit
+## php-build-plugin-phpunit
+#RUN \
+#  cd /usr/local/phpenv/plugins/php-build/share/php-build/after-install.d && \
+#  curl -o phpunit https://raw.githubusercontent.com/CHH/php-build-plugin-phpunit/master/share/php-build/after-install.d/phpunit && \
+#  chgrp -R phpenv phpunit && \
+#  chmod -R g+rwxXs phpunit
 
 # Install multiple versions of php
 ENV PHP_BUILD_CONFIGURE_OPTS --with-apxs2
@@ -99,11 +113,4 @@ RUN xargs -L 1 -i ksh -c 'phpenv install php-{}' < /usr/local/phpenv/versions.tx
 RUN \
   phpenv global 5.6.4 && \
   phpenv rehash
-
-# install phpenv-apache-version
-RUN \
-  cd /usr/local/phpenv/plugins && \
-  git clone https://github.com/garamon/phpenv-apache-version && \
-  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
-  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
 
