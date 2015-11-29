@@ -68,12 +68,12 @@ RUN \
   chgrp -R phpenv /usr/local/phpenv/plugins/php-build && \
   chmod -R g+rwxXs /usr/local/phpenv/plugins/php-build
 
-# install phpenv-apache-version
-RUN \
-  cd /usr/local/phpenv/plugins && \
-  git clone https://github.com/garamon/phpenv-apache-version && \
-  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
-  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
+## install phpenv-apache-version
+#RUN \
+#  cd /usr/local/phpenv/plugins && \
+#  git clone https://github.com/garamon/phpenv-apache-version && \
+#  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
+#  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
 
 # install phpenv-composer
 RUN \
@@ -101,9 +101,10 @@ RUN chmod -R g+rwxXs /usr/local/phpenv
 #  chmod -R g+rwxXs phpunit
 
 # Install multiple versions of php
-ENV PHP_BUILD_CONFIGURE_OPTS --with-apxs2
+# ENV PHP_BUILD_CONFIGURE_OPTS --with-apxs2
 RUN perl -i -pe 's/--enable-fpm\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
-RUN sed -i -e '$s/$/\n--with-apxs2=\/usr\/sbin\/apxs/' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
+# RUN sed -i -e '$s/$/\n--with-apxs2=\/usr\/sbin\/apxs/' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
+RUN sed -i -e '$s/--with-apxs2\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
 
 ADD versions.txt /usr/local/phpenv/versions.txt
 # RUN xargs -L 1 -i ksh -c 'phpenv install php-{}; mv /usr/lib/httpd/modules/libphp5.so /usr/local/phpenv/versions/{}/' < /usr/local/phpenv/versions.txt
