@@ -1,13 +1,17 @@
 FROM centos:centos6
 MAINTAINER pepechoko
 
-RUN yum update -y
-RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+RUN yum update -y && \
+    yum clean all
+
+RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm && \
+    yum clean all
 
 RUN yum install -y --enablerepo=epel \
    re2c \
    libmcrypt \
-   libmcrypt-devel
+   libmcrypt-devel && \
+   yum clean all
 
 RUN yum install -y \
   ksh \
@@ -44,7 +48,8 @@ RUN yum install -y \
   which \
   tar \
   bzip2 \
-  wget
+  wget && \
+  yum clean all
 
 ## add phpenv group
 RUN groupadd phpenv
@@ -93,18 +98,9 @@ RUN eval "(phpenv init -)"
 RUN chgrp -R phpenv /usr/local/phpenv
 RUN chmod -R g+rwxXs /usr/local/phpenv
 
-## php-build-plugin-phpunit
-#RUN \
-#  cd /usr/local/phpenv/plugins/php-build/share/php-build/after-install.d && \
-#  curl -o phpunit https://raw.githubusercontent.com/CHH/php-build-plugin-phpunit/master/share/php-build/after-install.d/phpunit && \
-#  chgrp -R phpenv phpunit && \
-#  chmod -R g+rwxXs phpunit
-
 # Install multiple versions of php
-# ENV PHP_BUILD_CONFIGURE_OPTS --with-apxs2
 RUN perl -i -pe 's/--enable-fpm\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
-# RUN sed -i -e '$s/$/\n--with-apxs2=\/usr\/sbin\/apxs/' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
-RUN sed -i -e '$s/--with-apxs2\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
+# RUN sed -i -e '$s/--with-apxs2\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
 
 ADD versions.txt /usr/local/phpenv/versions.txt
 # RUN xargs -L 1 -i ksh -c 'phpenv install php-{}; mv /usr/lib/httpd/modules/libphp5.so /usr/local/phpenv/versions/{}/' < /usr/local/phpenv/versions.txt
