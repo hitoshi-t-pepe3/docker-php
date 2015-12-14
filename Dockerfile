@@ -104,7 +104,8 @@ RUN sed -i -e '$s/--with-apxs2\n//g' /usr/local/phpenv/plugins/php-build/share/p
 
 ADD versions.txt /usr/local/phpenv/versions.txt
 # RUN xargs -L 1 -i ksh -c 'phpenv install php-{}; mv /usr/lib/httpd/modules/libphp5.so /usr/local/phpenv/versions/{}/' < /usr/local/phpenv/versions.txt
-RUN xargs -L 1 -i ksh -c 'phpenv install php-{}' < /usr/local/phpenv/versions.txt
+# RUN xargs -L 1 -i ksh -c 'phpenv install php-{}' < /usr/local/phpenv/versions.txt
+RUN xargs -L 1 -i ksh -c '/usr/local/phpenv/plugins/php-build/bin/php-build {} /usr/local/phpenv/versins/{}' < /usr/local/phpenv/versions.txt
 
 # settgin global use PHP
 RUN \
