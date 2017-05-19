@@ -99,17 +99,24 @@ RUN chgrp -R phpenv /usr/local/phpenv
 RUN chmod -R g+rwxXs /usr/local/phpenv
 
 # Install multiple versions of php
-RUN perl -i -pe 's/--enable-fpm\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
-RUN sed -i -e '$s/--with-apxs2\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
+# RUN perl -i -pe 's/--enable-fpm\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
+# RUN sed -i -e '$s/--with-apxs2\n//g' /usr/local/phpenv/plugins/php-build/share/php-build/default_configure_options
 
 ADD versions.txt /usr/local/phpenv/versions.txt
-# RUN xargs -L 1 -i ksh -c 'phpenv install php-{}; mv /usr/lib/httpd/modules/libphp5.so /usr/local/phpenv/versions/{}/' < /usr/local/phpenv/versions.txt
-# RUN xargs -L 1 -i ksh -c 'phpenv install php-{}' < /usr/local/phpenv/versions.txt
-RUN xargs -L 1 -i ksh -c '/usr/local/phpenv/plugins/php-build/bin/php-build {} /usr/local/phpenv/versions/{}' < /usr/local/phpenv/versions.txt
+RUN xargs -L 1 -i ksh -c ' \ 
+  sed -i "1s/^/configure_option -D --enable-fpm\n/" /usr/local/phpenv/plugins/php-build/share/php-build/definitions/{}; \
+  sed -i "1s/^/configure_option --disable-fpm\n/" /usr/local/phpenv/plugins/php-build/share/php-build/definitions/{}; \
+  sed -i "1s/^/configure_option --with-apxs2=\/usr\/sbin\/apxs\n/" /usr/local/phpenv/plugins/php-build/share/php-build/definitions/{}; \
+' < /usr/local/phpenv/versions.txt
+
+RUN xargs -L 1 -i ksh -c ' \
+  /usr/local/phpenv/plugins/php-build/bin/php-build {} /usr/local/phpenv/versions/{}; \
+  mv /etc/httpd/modules/libphp5.so /usr/local/phpenv/versions/{}/ \
+' < /usr/local/phpenv/versions.txt
 
 # settgin global use PHP
-ADD global_phpenv_version  /usr/local/phpenv/global_phpenv_version
+ADD global_version.txt /usr/local/phpenv/global_version.txt 
 RUN \
-  phpenv global `cat /usr/local/phpenv/global_phpenv_version` && \
+  phpenv global `cat /usr/local/phpenv/global_version.txt` && \
   phpenv rehash
 
