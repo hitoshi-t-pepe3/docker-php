@@ -73,12 +73,12 @@ RUN \
   chgrp -R phpenv /usr/local/phpenv/plugins/php-build && \
   chmod -R g+rwxXs /usr/local/phpenv/plugins/php-build
 
-## install phpenv-apache-version
-#RUN \
-#  cd /usr/local/phpenv/plugins && \
-#  git clone https://github.com/garamon/phpenv-apache-version && \
-#  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
-#  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
+# install phpenv-apache-version
+RUN \
+  cd /usr/local/phpenv/plugins && \
+  git clone https://github.com/garamon/phpenv-apache-version && \
+  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
+  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
 
 # install phpenv-composer
 RUN \
@@ -108,7 +108,8 @@ ADD versions.txt /usr/local/phpenv/versions.txt
 RUN xargs -L 1 -i ksh -c '/usr/local/phpenv/plugins/php-build/bin/php-build {} /usr/local/phpenv/versions/{}' < /usr/local/phpenv/versions.txt
 
 # settgin global use PHP
+ADD global_phpenv_version  /usr/local/phpenv/global_phpenv_version
 RUN \
-  phpenv global 5.6.4 && \
+  phpenv global `cat /usr/local/phpenv/global_phpenv_version` && \
   phpenv rehash
 
