@@ -73,12 +73,12 @@ RUN \
   chgrp -R phpenv /usr/local/phpenv/plugins/php-build && \
   chmod -R g+rwxXs /usr/local/phpenv/plugins/php-build
 
-## install phpenv-apache-version
-#RUN \
-#  cd /usr/local/phpenv/plugins && \
-#  git clone https://github.com/garamon/phpenv-apache-version && \
-#  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
-#  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
+# install phpenv-apache-version
+RUN \
+  cd /usr/local/phpenv/plugins && \
+  git clone https://github.com/garamon/phpenv-apache-version && \
+  chgrp -R phpenv /usr/local/phpenv/plugins/phpenv-apache-version && \
+  chmod -R g+rwxXs /usr/local/phpenv/plugins/phpenv-apache-version
 
 # install phpenv-composer
 RUN \
