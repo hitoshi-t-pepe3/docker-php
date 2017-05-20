@@ -43,6 +43,7 @@ RUN yum install -y \
   oniguruma-devel \
   openssl-devel \
   readline-devel \
+  sudo \
   t1lib \
   t1lib-devel \
   which \
@@ -55,9 +56,11 @@ RUN yum install -y \
 RUN groupadd phpenv
 
 # Install PHPenv
+#   git clone git://github.com/phpenv/phpenv.git && \
+ENV PHPENV_ROOT /usr/local/phpenv 
 RUN \
   cd /usr/local && \
-  git clone git://github.com/phpenv/phpenv.git && \
+  curl -L https://raw.github.com/CHH/phpenv/master/bin/phpenv-install.sh | sh && \
   chgrp -R phpenv /usr/local/phpenv && \
   chmod -R g+rwxXs /usr/local/phpenv && \
   cd /usr/local/phpenv && \
